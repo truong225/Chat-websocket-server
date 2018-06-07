@@ -10,32 +10,24 @@ export default class SingIn extends Component {
     constructor(props) {
         super(props);
 
-        var stomp = SocketConnection.stomp;
-        stomp.connect({}
-            , function onConnect(data){
-                stomp.subscribe("/public/login", this.receive);
-            }
-            , function onError(error) {
-            alert("WebSocket error: " + error);
-        });
 
         this.state = {
             user: '',
             password: '',
-            stompClient: stomp
+            stompClient: SocketConnection.stomp
         };
 
 
     }
 
-    receive(message){
-        const receivedMessage=JSON.parse(message);
-        if(this.receivedMessage.type == 'error'){
-        }
-        else{
-            this.props.onClickAdd();
-        }
-    }
+    // receive(message){
+    //     const receivedMessage=JSON.parse(message);
+    //     if(receivedMessage.type === 'error'){
+    //     }
+    //     else{
+    //         this.props.onClickAdd();
+    //     }
+    // }
 
     handleUserChange(e) {
         this.setState({ user: e.target.value })
@@ -51,6 +43,24 @@ export default class SingIn extends Component {
             "password": this.state.password
         }
         this.state.stompClient.send("/app/chat/login", {}, JSON.stringify(messagePayload));
+
+        this.state.stompClient.connect({}
+            , function onConnect(data) {
+                this.state.stompClient.subscribe("/public/login", (message) = > {
+                    const receivedMessage = JSON.parse(message);
+                if (receivedMessage.type === 'error') {
+                    alert('error')
+                }
+                else {
+                    this.props.onClickAdd();
+                    alert('Hello')
+                }
+            })
+                ;
+            }
+            , function onError(error) {
+                alert("WebSocket error: " + error);
+            });
     }
 
     render() {
