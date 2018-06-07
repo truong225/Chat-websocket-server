@@ -1,33 +1,35 @@
 import React, {Component} from "react";
 import SocketConnection from './SocketConnection'
 
-const notifyLabel={
-    color: "red",
-    fontSize: "10px"
-};
-
 export default class SingIn extends Component {
     constructor(props) {
         super(props);
 
+        var stomp = SocketConnection.stomp;
+        stomp.connect({}
+            , function onConnect(data) {
+                stomp.subscribe("/public/login", function onReceive(message){
+                    const receivedMessage = JSON.parse(message);
+                if (receivedMessage.type === 'error') {
+                    console.log('hello')
+                }
+                else {
+                    this.props.onClickAdd();
+                    alert('Hello')
+                }
+            })
+                ;
+            }
+            , function onError(error) {
+                alert("WebSocket error: " + error);
+            });
 
         this.state = {
             user: '',
             password: '',
-            stompClient: SocketConnection.stomp
+            stompClient: stomp
         };
-
-
     }
-
-    // receive(message){
-    //     const receivedMessage=JSON.parse(message);
-    //     if(receivedMessage.type === 'error'){
-    //     }
-    //     else{
-    //         this.props.onClickAdd();
-    //     }
-    // }
 
     handleUserChange(e) {
         this.setState({ user: e.target.value })
@@ -43,24 +45,6 @@ export default class SingIn extends Component {
             "password": this.state.password
         }
         this.state.stompClient.send("/app/chat/login", {}, JSON.stringify(messagePayload));
-
-        this.state.stompClient.connect({}
-            , function onConnect(data) {
-                this.state.stompClient.subscribe("/public/login", (message) = > {
-                    const receivedMessage = JSON.parse(message);
-                if (receivedMessage.type === 'error') {
-                    alert('error')
-                }
-                else {
-                    this.props.onClickAdd();
-                    alert('Hello')
-                }
-            })
-                ;
-            }
-            , function onError(error) {
-                alert("WebSocket error: " + error);
-            });
     }
 
     render() {
@@ -76,8 +60,7 @@ export default class SingIn extends Component {
                         this.handlePasswordChange(e);
                     }} id="inputPassword" className="form-control" placeholder="Password" required />
                     <br/>
-                    <label className={notifyLabel} ref={this.errorText}>{this.errorText}</label>
-                    <button className="btn btn-lg btn-primary btn-block" onClick={this.signIn.bind(this)} type="button" > Sign in </button>
+                    <button className="btn btn-lg btn-primary btn-block" onClick={this.signIn} type="button" > Sign in </button>
                 </form>
             </div>
 
