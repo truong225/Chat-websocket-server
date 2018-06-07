@@ -43,7 +43,7 @@ public class UserController {
             return "chat";
         } else
             model.addAttribute("user", new User());
-            return "login";
+        return "login";
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)

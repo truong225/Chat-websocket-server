@@ -21,7 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      *                 STOMP: Simple text oriented message protocol. It's protocol define format and rules for data exchange
      */
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry){
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws/").setAllowedOrigins("*").withSockJS();
     }
 

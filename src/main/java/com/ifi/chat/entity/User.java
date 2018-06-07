@@ -40,12 +40,12 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String password){
+    public User(String username, String password) {
         setUsername(username);
         setPassword(password);
     }
 
-    public User(){
+    public User() {
 
     }
 }
