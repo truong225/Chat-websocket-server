@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link type="text/css" th:href="@{/app.css}">
+    <link rel="stylesheet"
+          href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <title>Sign in</title>
+</head>
+<body>
+
+<div class="pure-form" id="userForm">
+    <fieldset class="pure-group">
+        <h1>Sign in information</h1>
+
+        <form action="#" th:object="${user}" th:action="@{/login}"
+              method="POST">
+            <p th:text="${err}"></p>
+            <input id="username" th:field="*{username}" type="text"
+                   placeholder="Username"
+                   class="pure-input-1-2">
+            <input id="password" th:field="*{password}" type="password"
+                   placeholder="Password"
+                   class="pure-input-1-2">
+            <input type="submit" value="Log in">
+        </form>
+        <a style="text-decoration: none;" href="/signup">Sign up</a>
+    </fieldset>
+</div>
+</body>
+</html>
